@@ -1,0 +1,81 @@
+.game-board {
+  height: 500px;
+  width: 500px;
+  background: black;
+  border-radius: 50%;
+  position: relative;
+  padding: 15px;
+  border: 30px solid black;
+}
+
+.green-button {
+  position: absolute;
+  background: green;
+  width: 250px;
+  height: 250px;
+  border-top-left-radius: 100%;
+  left: 0;
+  top: 0;
+}
+
+.red-button {
+  position: absolute;
+  background: red;
+  width: 250px;
+  height: 250px;
+  border-top-right-radius: 100%;
+  right: 0;
+  top: 0;
+}
+
+.yellow-button {
+  position: absolute;
+  background: yellow;
+  width: 250px;
+  height: 250px;
+  border-bottom-left-radius: 100%;
+  left: 0;
+  bottom: 0;
+}
+
+.blue-button {
+  position: absolute;
+  background: blue;
+  width: 250px;
+  height: 250px;
+  border-bottom-right-radius: 100%;
+  right: 0;
+  bottom: 0;
+}
+
+.dashboard {
+  height: 250px;
+  width: 250px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  left: 25%;
+  top: 25%;
+}
+
+.white-bg {
+    height: 230px;
+    width: 230px;
+    background: white;
+    border-radius: 50%;
+    left: 4%;
+    top: 4%;
+    position: absolute;
+    text-align: center;
+}
+
+.game-name {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', Geneva, Verdana, sans-serif;
+    font-size: 3em;
+}
+
+.controls,
+.on-off-switch {
+    display: flex;
+    justify-content: space-evenly;
+}
