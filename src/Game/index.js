@@ -21,22 +21,38 @@ class Game extends React.Component {
 
         <div className="dashboard">
           <div className="white-bg">
-            <h1 className="game-name">Simon</h1>
+            <h1 className="game-name mb-0">Simon</h1>
             <div className="controls">
               <div className="display">
-                <p className="display-text">Count</p>
+                <div className="screen-frame">
+                  <div className="screen">
+                    <span className="count-output">--</span>
+                  </div>
+                </div>
+                <p className="display-text text-uppercase mt-5">Count</p>
               </div>
               <div className="start-button">
-                <p className="display-text">Start</p>
+                <div className="start-button-outline">
+                </div>
+                <p className="display-text text-uppercase mt-5">Start</p>
               </div>
               <div className="strict-mode-button">
-                <p className="display-text">Strict</p>
+                <div className="strict-mode-indicator">
+                </div>
+                <div className="strict-mode-button-outline">
+                </div>
+                <p className="display-text text-uppercase mt-5">Strict</p>
               </div>
             </div>
             <div className="on-off-switch">
-            <p className="display-text">Off</p>
-            <p className="display-text">On</p>
+              <p className="display-text text-uppercase">Off</p>
 
+              <label class="switch ml-5">
+                <input type="checkbox" />
+                <span class="slider round" />
+              </label>
+
+              <p className="display-text ml-5 text-uppercase">On</p>
             </div>
           </div>
         </div>
