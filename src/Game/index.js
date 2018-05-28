@@ -14,7 +14,7 @@ class Game extends React.Component {
       strictModeEnabled: false,
       gameStarted: false,
       count: null,
-      level: 0,
+      level: 1,
       currentSteps: [],
       currentGuess: [],
       clickIndex: 0
@@ -45,6 +45,7 @@ class Game extends React.Component {
         strictModeEnabled: false,
         gameStarted: false,
         count: null,
+        level: 1,
         currentSteps: []
       });
     }
@@ -54,7 +55,7 @@ class Game extends React.Component {
     if (this.state.gameOn) {
       if (this.state.gameStarted) {
         this.setState({
-          count: 0,
+          level: 1,
           currentSteps: []
         });
       } else {
@@ -105,24 +106,36 @@ class Game extends React.Component {
   };
 
   continueGame = () => {
-    this.state.currentSteps.forEach(color => {
+    let timer = 500;
+
+    this.state.currentSteps.forEach((color, index) => {
+      timer = timer * index + 1;
+
       setTimeout(() => {
         this.playSound(color);
-      }, 500);
+      }, timer);
     });
-    this.playSound(chooseRandomColor());
+
+    const newColor = chooseRandomColor();
+    setTimeout(() => {
+      this.playSound(newColor);
+    }, timer + 500);
+
+    this.setState(prevState => ({
+      currentSteps: [...this.state.currentSteps, newColor]
+    }));
   };
 
   displayGameOver = () => {
     this.setState({
-      count: '!!'
+      level: '!!'
     });
   };
 
   restartGame = () => {
     this.setState({
       count: null,
-      level: 0,
+      level: 1,
       currentSteps: [],
       currentGuess: [],
       clickIndex: 0
@@ -131,29 +144,38 @@ class Game extends React.Component {
     this.onGameStart();
   };
 
-  onButtonClick = userGuess => {
-    console.log(userGuess);
-    // console.log(this.state.currentSteps[this.state.clickIndex]);
-    if (userGuess === this.state.currentSteps[this.state.clickIndex]) {
-      this.setState(
-        prevState => ({
-          clickIndex: prevState.clickIndex + 1
-        }),
-        console.log(this.state.clickIndex)
-      );
+  displayWinningtext = () => {
+    this.setState({
+      level: '<3'
+    });
+  };
 
-      console.log(this.state.currentSteps.length);
-      if (this.state.clickIndex === this.state.currentSteps.length) {
+  onButtonClick = userGuess => {
+    this.playSound(userGuess);
+
+    if (userGuess === this.state.currentSteps[this.state.clickIndex]) {
+      if (this.state.clickIndex + 1 === this.state.currentSteps.length) {
         if (this.state.level === 20) {
           this.displayWinningtext();
-          this.restartGame();
+
+          setTimeout(() => {
+            this.restartGame();
+          }, 2000);
         } else {
           this.setState(prevState => ({
             count: prevState.count + 1,
             clickIndex: 0,
             level: prevState.level + 1
           }));
+
+          setTimeout(() => {
+            this.continueGame();
+          }, 1000);
         }
+      } else {
+        this.setState(prevState => ({
+          clickIndex: prevState.clickIndex + 1
+        }));
       }
     } else {
       this.displayGameOver();
@@ -209,7 +231,7 @@ class Game extends React.Component {
                     <span className="count-output">
                       {this.state.gameOn === true
                         ? this.state.gameStarted
-                          ? this.state.count
+                          ? this.state.level
                           : '--'
                         : this.state.gameOn}
                     </span>
