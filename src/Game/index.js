@@ -44,13 +44,20 @@ class Game extends React.Component {
 
   onGameStart = () => {
     if (this.state.gameOn) {
-      this.setState({
-        gameStarted: true,
-        count: 0
-      });
+      if (this.state.gameStarted) {
+        this.setState({
+          count: 0,
+          currentSteps: []
+        })
+      } else {
+        this.setState({
+          gameStarted: true,
+          count: 0
+        });
+        this.playSound(chooseRandomColor());
+      }
     }
 
-    this.playSound(chooseRandomColor());
   };
 
   playSound = (color) => {
@@ -60,9 +67,14 @@ class Game extends React.Component {
       this.blueButton.current.play()
     } else if (color === 'yellow') {
       this.yellowButton.current.play()
-    } else {
+    } else if (color === 'green') {
       this.greenButton.current.play()
     }
+
+    this.setState(prevState => ({
+      count: prevState.count + 1,
+      currentSteps: [...prevState.currentSteps, color]
+    }))
   }
 
   render() {
