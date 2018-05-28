@@ -4,6 +4,27 @@ import './index.css';
 class Game extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      gameOn: false,
+      strictModeEnabled: false,
+      gameStarted: false,
+      count: null
+    }
+
+    this.onSwitchChange = this.onSwitchChange.bind(this)
+  }
+
+  onSwitchChange = newSwitch => {
+    if (this.state.gameOn === false) {
+      this.setState({
+        gameOn: true
+      })
+    } else {
+      this.setState({
+        gameOn: false
+      })
+    }
   }
 
   render() {
@@ -26,7 +47,7 @@ class Game extends React.Component {
               <div className="display">
                 <div className="screen-frame">
                   <div className="screen">
-                    <span className="count-output">--</span>
+                    <span className="count-output">{this.state.gameOn === true ? '--' : this.state.gameOn}</span>
                   </div>
                 </div>
                 <p className="display-text text-uppercase mt-5">Count</p>
@@ -47,9 +68,9 @@ class Game extends React.Component {
             <div className="on-off-switch">
               <p className="display-text text-uppercase">Off</p>
 
-              <label class="switch ml-5">
-                <input type="checkbox" />
-                <span class="slider round" />
+              <label className="switch ml-5">
+                <input type="checkbox" onChange={this.onSwitchChange} />
+                <span className="slider round" />
               </label>
 
               <p className="display-text ml-5 text-uppercase">On</p>
