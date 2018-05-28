@@ -15,7 +15,9 @@ class Game extends React.Component {
       gameStarted: false,
       count: null,
       level: 0,
-      currentSteps: []
+      currentSteps: [],
+      currentGuess: [],
+      clickIndex: 0
     };
 
     this.redButton = React.createRef();
@@ -61,67 +63,103 @@ class Game extends React.Component {
           count: 0
         });
       }
-      this.playSound(chooseRandomColor());
+
+      const color = chooseRandomColor();
+
+      this.playSound(color);
+      this.setState(prevState => ({
+        currentSteps: [...prevState.currentSteps, color]
+      }));
     }
   };
 
   playSound = color => {
     if (color === 'red') {
-      this.redButtonWrapper.current.style.opacity = "0.5";
+      this.redButtonWrapper.current.style.opacity = '0.5';
       this.redButton.current.play();
-        setTimeout(() => {
-          this.redButtonWrapper.current.style.opacity = "1";
-        }, this.redButton.current.duration * 1000);
+      setTimeout(() => {
+        this.redButtonWrapper.current.style.opacity = '1';
+      }, this.redButton.current.duration * 1000);
     } else if (color === 'blue') {
-      this.blueButtonWrapper.current.style.opacity = "0.5";
+      this.blueButtonWrapper.current.style.opacity = '0.5';
       this.blueButton.current.play();
-        setTimeout(() => {
-          this.blueButtonWrapper.current.style.opacity = "1";
-        }, this.blueButton.current.duration * 1000);
+      setTimeout(() => {
+        this.blueButtonWrapper.current.style.opacity = '1';
+      }, this.blueButton.current.duration * 1000);
       this.blueButton.current.play();
     } else if (color === 'yellow') {
-      this.yellowButtonWrapper.current.style.opacity = "0.5";
+      this.yellowButtonWrapper.current.style.opacity = '0.5';
       this.yellowButton.current.play();
-        setTimeout(() => {
-          this.yellowButtonWrapper.current.style.opacity = "1";
-        }, this.yellowButton.current.duration * 1000);
+      setTimeout(() => {
+        this.yellowButtonWrapper.current.style.opacity = '1';
+      }, this.yellowButton.current.duration * 1000);
       this.yellowButton.current.play();
     } else if (color === 'green') {
-      this.greenButtonWrapper.current.style.opacity = "0.5";
+      this.greenButtonWrapper.current.style.opacity = '0.5';
       this.greenButton.current.play();
-        setTimeout(() => {
-          this.greenButtonWrapper.current.style.opacity = "1";
-        }, this.greenButton.current.duration * 1000);
+      setTimeout(() => {
+        this.greenButtonWrapper.current.style.opacity = '1';
+      }, this.greenButton.current.duration * 1000);
       this.greenButton.current.play();
     }
-
-    this.setState(prevState => ({
-      count: prevState.count + 1,
-      currentSteps: [...prevState.currentSteps, color]
-    }));
   };
 
   continueGame = () => {
-    this.playSound(chooseRandomColor())
-  }
+    this.state.currentSteps.forEach(color => {
+      setTimeout(() => {
+        this.playSound(color);
+      }, 500);
+    });
+    this.playSound(chooseRandomColor());
+  };
+
+  displayGameOver = () => {
+    this.setState({
+      count: '!!'
+    });
+  };
+
+  restartGame = () => {
+    this.setState({
+      count: null,
+      level: 0,
+      currentSteps: [],
+      currentGuess: [],
+      clickIndex: 0
+    });
+
+    this.onGameStart();
+  };
 
   onButtonClick = userGuess => {
-    const currentMove = this.state.currentSteps[
-      this.state.currentSteps.length - 1
-    ];
-    if (userGuess !== currentMove) {
-      this.setState({
-        count: null,
-        level: 0,
-        currentSteps: []
-      });
-    } else {
-      this.setState(prevState => ({
-        count: prevState.count + 1,
-        level: prevState.level + 1,
-      }));
+    console.log(userGuess);
+    // console.log(this.state.currentSteps[this.state.clickIndex]);
+    if (userGuess === this.state.currentSteps[this.state.clickIndex]) {
+      this.setState(
+        prevState => ({
+          clickIndex: prevState.clickIndex + 1
+        }),
+        console.log(this.state.clickIndex)
+      );
 
-      this.continueGame();
+      console.log(this.state.currentSteps.length);
+      if (this.state.clickIndex === this.state.currentSteps.length) {
+        if (this.state.level === 20) {
+          this.displayWinningtext();
+          this.restartGame();
+        } else {
+          this.setState(prevState => ({
+            count: prevState.count + 1,
+            clickIndex: 0,
+            level: prevState.level + 1
+          }));
+        }
+      }
+    } else {
+      this.displayGameOver();
+      setTimeout(() => {
+        this.restartGame();
+      }, 1000);
     }
   };
 
