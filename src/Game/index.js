@@ -16,7 +16,6 @@ class Game extends React.Component {
       count: null,
       level: 1,
       currentSteps: [],
-      currentGuess: [],
       clickIndex: 0
     };
 
@@ -106,15 +105,18 @@ class Game extends React.Component {
   };
 
   continueGame = () => {
-    let timer = 500;
+    let timer = 1000;
 
-    this.state.currentSteps.forEach((color, index) => {
-      timer = timer * index + 1;
+    const playSteps = this.state.currentSteps;
 
-      setTimeout(() => {
-        this.playSound(color);
-      }, timer);
-    });
+    for (let index in playSteps) {
+      timer = index * 500;
+      (() => {
+        setTimeout(function timer() {
+          this.playSound(playSteps[index]);
+        }.bind(this), timer);
+      })();
+    }
 
     const newColor = chooseRandomColor();
     setTimeout(() => {
@@ -137,7 +139,6 @@ class Game extends React.Component {
       count: null,
       level: 1,
       currentSteps: [],
-      currentGuess: [],
       clickIndex: 0
     });
 
