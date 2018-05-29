@@ -209,12 +209,19 @@ input:checked + .slider:before {
 }
 
 .strict-mode-indicator {
-  background: #32050c;
   border: 1px solid #222;
   border-radius: 50%;
   width: 8px;
   height: 8px;
   margin-bottom: 5px;
+}
+
+.strict-mode-indicator-on {
+  background: #fc0102;
+}
+
+.strict-mode-indicator-off {
+  background: #32050c;
 }
 
 .strict-mode-button {

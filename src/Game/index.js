@@ -31,6 +31,7 @@ class Game extends React.Component {
     this.onSwitchChange = this.onSwitchChange.bind(this);
     this.onGameStart = this.onGameStart.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this); // Redundant but I like to keep all event handlers explicitly declared
+    this.onStrictModeToggle = this.onStrictModeToggle.bind(this);
   }
 
   onSwitchChange = () => {
@@ -73,6 +74,20 @@ class Game extends React.Component {
     }
   };
 
+  onStrictModeToggle = () => {
+    if (this.state.gameOn) {
+      if (this.state.strictModeEnabled) {
+        this.setState({
+          strictModeEnabled: false
+        });
+      } else {
+        this.setState({
+          strictModeEnabled: true
+        });
+      }
+    }
+  };
+
   playSound = color => {
     if (color === 'red') {
       this.redButtonWrapper.current.style.opacity = '0.5';
@@ -112,9 +127,12 @@ class Game extends React.Component {
     for (let index in playSteps) {
       timer = index * 500;
       (() => {
-        setTimeout(function timer() {
-          this.playSound(playSteps[index]);
-        }.bind(this), timer);
+        setTimeout(
+          function timer() {
+            this.playSound(playSteps[index]);
+          }.bind(this),
+          timer
+        );
       })();
     }
 
@@ -179,10 +197,12 @@ class Game extends React.Component {
         }));
       }
     } else {
-      this.displayGameOver();
-      setTimeout(() => {
-        this.restartGame();
-      }, 1000);
+      if (this.strictModeEnabled) {
+        this.displayGameOver();
+        setTimeout(() => {
+          this.restartGame();
+        }, 1000);
+      }
     }
   };
 
@@ -244,8 +264,11 @@ class Game extends React.Component {
                 <div className="start-button-outline" />
                 <p className="display-text text-uppercase mt-5">Start</p>
               </div>
-              <div className="strict-mode-button">
-                <div className="strict-mode-indicator" />
+              <div
+                className="strict-mode-button"
+                onClick={this.onStrictModeToggle}
+              >
+                <div className={"strict-mode-indicator " + (this.state.strictModeEnabled ? 'strict-mode-indicator-on' : 'strict-mode-indicator-off')} />
                 <div className="strict-mode-button-outline" />
                 <p className="display-text text-uppercase mt-5">Strict</p>
               </div>
