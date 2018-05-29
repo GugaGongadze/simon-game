@@ -163,6 +163,23 @@ class Game extends React.Component {
     this.onGameStart();
   };
 
+  replaySteps = () => {
+    let timer = 1000;
+    const playSteps = this.state.currentSteps;
+
+    for (let index in playSteps) {
+      timer = index * 500;
+      (() => {
+        setTimeout(
+          function timer() {
+            this.playSound(playSteps[index]);
+          }.bind(this),
+          timer
+        );
+      })();
+    }
+  }
+
   displayWinningtext = () => {
     this.setState({
       level: '<3'
@@ -197,11 +214,18 @@ class Game extends React.Component {
         }));
       }
     } else {
-      if (this.strictModeEnabled) {
+      if (this.state.strictModeEnabled) {
         this.displayGameOver();
         setTimeout(() => {
           this.restartGame();
         }, 1000);
+      } else {
+        setTimeout(() => {
+          this.replaySteps();
+        }, 1000);
+        this.setState({
+          clickIndex: 0
+        })
       }
     }
   };
